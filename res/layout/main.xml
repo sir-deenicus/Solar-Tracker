@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            xmlns:android="http://schemas.android.com/apk/res/android">
+<LinearLayout
+              android:orientation="vertical"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+        >
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Location:"
+                android:id="@+id/textViewLOC"/>
+        <TextView
+                android:id="@+id/LIGHT_reading"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" android:text="Light Value:"/>
+        <TextView
+                android:id="@+id/GPSInf"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" android:text="Scanning GPS:"/>
+
+        <ToggleButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/toggleButtonGPS" android:checked="false"/>
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Get Cloud Cover"
+                android:id="@+id/buttonCloud" android:enabled="false"/>
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Get Brightness"
+                android:id="@+id/buttonLight" android:enabled="false"/>
+        <TextView
+                android:id="@+id/textViewInfo"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" android:text="Info:"/>
+
+
+        <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/radGroup">
+            <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Outside"
+                    android:id="@+id/radioButtonOut" android:layout_gravity="left"/>
+            <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Inside"
+                    android:id="@+id/radioButtonIn" android:layout_gravity="left"/>
+
+        </RadioGroup>
+        <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/scrollView" android:layout_gravity="center_horizontal"/>
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" android:text="Panel Amps"/>
+        <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:digits="0123456789.,"
+                android:ems="10"
+                android:id="@+id/editTextAmpReading"/>
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Save"
+                android:id="@+id/buttonSave" android:enabled="false"/>
+        <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" android:text="Battery Volts"/>
+        <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:digits="0123456789.,"
+                android:ems="10"
+                android:id="@+id/editTextVoltReading"/>
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" android:text="Battery Amps Out"/>
+        <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:digits="0123456789.,"
+                android:ems="10"
+                android:id="@+id/editTextBAmpReading"/>
+
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Save Volts"
+                android:id="@+id/buttonSaveVolts"/>
+
+
+
+</LinearLayout>    </ScrollView>
+
+

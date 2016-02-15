@@ -40,9 +40,9 @@ public class SolarLightTracker extends Activity {
     String path = Environment.getExternalStorageDirectory() + "/Documents/";
     ArrayList<Double> lightSensorDataBuffer = new ArrayList<>();
 
-    Calendar c = Calendar.getInstance()  ;
     private String info;
     private TextView textViewInfo;
+    private boolean hasSensed = false;
 
     Double [] mapToDouble(String [] arr){
         Double [] newArr = new Double[arr.length];
@@ -64,6 +64,8 @@ public class SolarLightTracker extends Activity {
         final ToggleButton gpsButton = (ToggleButton) findViewById(R.id.toggleButtonGPS);
         final Button getDataButton = (Button) findViewById(R.id.buttonLight);
         final Button weatherButton = (Button) findViewById(R.id.buttonCloud);
+        final CheckBox chargingBox = (CheckBox) findViewById(R.id.checkBoxCharging);
+
         saveButton = (Button) findViewById(R.id.buttonSave);
 
         final ForecastIO fio = new ForecastIO(getResources().getString(R.string.apiKey));
@@ -75,12 +77,35 @@ public class SolarLightTracker extends Activity {
                 int id = ((RadioGroup) findViewById(R.id.radGroup)).getCheckedRadioButtonId();
                 String outOrIn = ((RadioButton) findViewById(id)).getText().toString();
                 String amps = ((EditText) findViewById(R.id.editTextAmpReading)).getText().toString();
+                double ampAvgFloat = Average(mapToDouble(amps.split(",")));
+                String ampAvg = String.valueOf(ampAvgFloat);
+                double altAmp = ampAvgFloat;
+                if(chargingBox.isChecked()){
+                    String voltsTxt = ((EditText) findViewById(R.id.editTextVoltReading)).getText().toString();
 
-                String ampAvg = String.valueOf(Average(mapToDouble(amps.split(","))));
-                SaveTextFile(path + "solar-brightness-info.txt", saveInfo + "," + ampAvg + "," + outOrIn + "\n");
-                textViewInfo.setText(info + ", Amps: " + ampAvg + ", " + outOrIn);
+                    double volts = Average(mapToDouble(voltsTxt.split(",")));
+                    if(volts <= 13.)
+                    {
+                      altAmp += 16.25;
+                    }
+                    else if(volts > 13. && volts < 13.5)
+                    {
+                        altAmp += 8. ;
+                    }
+                    else
+                    {
+                        altAmp += 4.;
+                    }
+                }
+                if(!hasSensed) {
+                    getData();
+                }
+                SaveTextFile(path + "solar-brightness-info.txt", saveInfo + "," + ampAvg + "," + outOrIn +  "," + altAmp + "\n");
+                textViewInfo.setText(info + ", Amps: " + ampAvg + ", " + outOrIn+  "," + altAmp);
                 Toast.makeText(SolarLightTracker.this, "Saved", Toast.LENGTH_LONG).show();
-                saveButton.setEnabled(false);
+                lightSensorDataBuffer.clear();
+                hasSensed = false;
+               // saveButton.setEnabled(false);
             }
         });
 
@@ -88,12 +113,19 @@ public class SolarLightTracker extends Activity {
             @Override
             public void onClick(View v) {
                 String voltsTxt = ((EditText) findViewById(R.id.editTextVoltReading)).getText().toString();
-                String bampsTxt = ((EditText) findViewById(R.id.editTextBAmpReading)).getText().toString();
+                //String bampsTxt = ((EditText) findViewById(R.id.editTextBAmpReading)).getText().toString();
 
-                String bamps = String.valueOf(Average(mapToDouble(bampsTxt.split(","))));
+                //String bamps = String.valueOf(Average(mapToDouble(bampsTxt.split(","))));
                 String volts = String.valueOf(Average(mapToDouble(voltsTxt.split(","))));
 
-                SaveTextFile(path + "solar-volts-info.txt", getTime() + "," + bamps + "," + volts + "\n");
+                Calendar c = Calendar.getInstance()  ;
+                int y = c.get(Calendar.YEAR);
+                int m = c.get(Calendar.MONTH) ;
+                int d = c.get(Calendar.DAY_OF_MONTH) ;
+
+                String date = y + "/" + m + "/" + d;
+
+                SaveTextFile(path + "solar-volts-info.txt", getTime() + "," + date + "," + volts + "\n");
                 Toast.makeText(SolarLightTracker.this, "Saved volts", Toast.LENGTH_LONG).show();
             }
         });
@@ -156,6 +188,7 @@ public class SolarLightTracker extends Activity {
             @Override
             public void onClick(View v) {
                 lightSensorDataBuffer.clear();
+                hasSensed = true;
                 readingSensor = true;
                 textViewInfo.setText("Gathering datapoints");
             }
@@ -191,6 +224,7 @@ public class SolarLightTracker extends Activity {
     }
 
     double getTime(){
+        Calendar c = Calendar.getInstance()  ;
         double h = c.get(Calendar.HOUR_OF_DAY);
         double m = c.get(Calendar.MINUTE) / 60.0;
         double time = h + m;
@@ -200,12 +234,12 @@ public class SolarLightTracker extends Activity {
     void getData() {
         double time = getTime();
         double avg = Average(lightSensorDataBuffer.toArray(new Double[lightSensorDataBuffer.size()]));
-        int wk = c.get(Calendar.WEEK_OF_YEAR);
+        int wk = Calendar.getInstance().get(Calendar.WEEK_OF_YEAR);
 
         info = "Time: " + time + ", Light Avg: " + avg +  ", Week: " + wk + ", Cloud Cover: " + ccover;
         saveInfo = time + ", " + avg +  "," + wk + "," + ccover;
         textViewInfo.setText(info);
-        saveButton.setEnabled(true);
+       // saveButton.setEnabled(true);
     }
 
     private final SensorEventListener LightSensorListener = new SensorEventListener() {
@@ -257,6 +291,7 @@ public class SolarLightTracker extends Activity {
 
     double Average(Double[] data) {
         double sum = 0.;
+        if(data.length == 0){return 0.;}
         for (double x : data) {
            sum+=x;
         }

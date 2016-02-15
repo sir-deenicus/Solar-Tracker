@@ -56,8 +56,17 @@
                     android:layout_height="wrap_content"
                     android:text="Inside"
                     android:id="@+id/radioButtonIn" android:layout_gravity="left"/>
-
+             <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Outside Window"
+                        android:id="@+id/radioButtonWindow" android:layout_gravity="left"/>
         </RadioGroup>
+        <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Is Mains Charging"
+                android:id="@+id/checkBoxCharging" android:layout_gravity="left"/>
         <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -76,7 +85,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Save"
-                android:id="@+id/buttonSave" android:enabled="false"/>
+                android:id="@+id/buttonSave" android:enabled="true"/>
         <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" android:text="Battery Volts"/>
@@ -89,14 +98,14 @@
                 android:id="@+id/editTextVoltReading"/>
         <TextView
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" android:text="Battery Amps Out"/>
+                android:layout_height="wrap_content"  android:visibility="gone" android:text="Battery Amps Out"/>
         <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="numberDecimal"
                 android:digits="0123456789.,"
                 android:ems="10"
-                android:id="@+id/editTextBAmpReading"/>
+                android:id="@+id/editTextBAmpReading" android:visibility="gone"/>
 
         <Button
                 android:layout_width="wrap_content"
